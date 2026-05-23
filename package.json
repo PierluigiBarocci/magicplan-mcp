@@ -5,6 +5,9 @@
   "description": "MCP-powered extraction and organization of Disneyland Paris visit data using live wait times, character, and weather APIs.",
   "main": "index.js",
   "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
