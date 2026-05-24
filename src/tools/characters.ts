@@ -1,7 +1,5 @@
 import { z } from 'zod';
-import { DISNEY_API_URL } from '../utils/constants.js';
-
-const USER_AGENT = 'magicplan-mcp/1.0';
+import { DISNEY_API_URL, USER_AGENT } from '../utils/constants.js';
 
 export const searchCharacterInputSchema = z.object({
   name: z
