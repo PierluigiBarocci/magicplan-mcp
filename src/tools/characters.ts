@@ -42,7 +42,7 @@ export interface Info {
   nextPage: string | null;
 }
 
-export const convertToCharOutput = (
+export const convertToCharacterOutput = (
   raw: DisneyAPICharacter,
 ): SearchCharacterOutput => {
   return {
@@ -51,6 +51,32 @@ export const convertToCharOutput = (
     tvShows: raw.tvShows ?? [],
     parkAttractions: raw.parkAttractions ?? [],
   };
+};
+
+export const validateAPIResponse = (
+  response: DisneyAPIResponse | null,
+): boolean => !response || !response.data || response.data.length === 0;
+
+export const getCharacterInfo = (
+  response: DisneyAPIResponse,
+  name: string,
+): SearchCharacterOutput => {
+  const characters = response.data.map(convertToCharacterOutput);
+  const character =
+    characters.find(
+      (c) =>
+        c.name.replace(/\s/g, '').toLowerCase() ===
+        name.replace(/\s/g, '').toLowerCase(),
+    ) ?? characters[0];
+  return character;
+};
+
+export const getCharacterAttractions = (
+  response: DisneyAPIResponse,
+  name: string,
+): { name: string; attractions: string[] } => {
+  const character = getCharacterInfo(response, name);
+  return { name: character.name, attractions: character.parkAttractions };
 };
 
 export const searchCharacter = async (
