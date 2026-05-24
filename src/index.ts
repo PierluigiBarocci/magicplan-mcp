@@ -14,6 +14,7 @@ import {
   orderRidesByWaitTime,
   resolveParks,
 } from './tools/waitTimes.js';
+import { getParkWeatherInputSchema, getParkWeather } from './tools/weather.js';
 
 // Create server instance
 const mcpServer = new McpServer({
@@ -172,6 +173,30 @@ mcpServer.registerTool(
 
     return {
       content: [{ type: 'text', text }],
+    };
+  },
+);
+
+// Register weather tool to get weather conditions for Disneyland Paris
+mcpServer.registerTool(
+  'get_park_weather',
+  {
+    description:
+      'Weather at Disneyland Paris (openweathermap.org, fixed location). Use for temperature, rain, and short-term forecast at the park. Returns °C, conditions, rain %, raining yes/no (and 3h slots for longer ranges). Input horizon: now (default), next_6h, today, tomorrow. Do NOT use for wait times (get_park_wait_times) or characters (search_character / get_character_attractions).',
+    inputSchema: getParkWeatherInputSchema,
+  },
+  async ({ horizon }) => {
+    const weather = await getParkWeather(horizon ?? 'now');
+    if (!weather) {
+      return {
+        content: [
+          { type: 'text', text: 'No weather data available right now.' },
+        ],
+        isError: true,
+      };
+    }
+    return {
+      content: [{ type: 'text', text: weather }],
     };
   },
 );
