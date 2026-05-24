@@ -15,6 +15,11 @@ import {
   resolveParks,
 } from './tools/waitTimes.js';
 import { getParkWeatherInputSchema, getParkWeather } from './tools/weather.js';
+import {
+  formatPlanVisit,
+  planVisit,
+  planVisitInputSchema,
+} from './tools/planVisit.js';
 
 // Create server instance
 const mcpServer = new McpServer({
@@ -197,6 +202,23 @@ mcpServer.registerTool(
     }
     return {
       content: [{ type: 'text', text: weather }],
+    };
+  },
+);
+
+mcpServer.registerTool(
+  'plan_visit',
+  {
+    description:
+      'Composite visit planner for Disneyland Paris: matches character park attractions (disneyapi.dev) to live wait times (both parks), filters by maxWaitMinutes, optionally indoor-only if weatherAware and rain expected. Returns sorted suggestions with wait, park, land, character, indoor/outdoor. Input: characterNames[], maxWaitMinutes, weatherAware?. Do NOT use for character bios (search_character), attraction lists only (get_character_attractions), weather alone (get_park_weather), or single-ride waits (get_park_wait_times).',
+    inputSchema: planVisitInputSchema,
+  },
+  async (input) => {
+    const result = await planVisit(input);
+    const text = formatPlanVisit(result);
+    return {
+      content: [{ type: 'text', text }],
+      isError: result.items.length === 0,
     };
   },
 );
