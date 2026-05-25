@@ -36,7 +36,7 @@ This server does **not** replace the official Disney app. It **aggregates public
 
 - **Node.js** 20+ (developed on Node 22)
 - **pnpm** ([install](https://pnpm.io/installation))
-- An MCP-capable client (e.g. [Claude Desktop](https://claude.ai/download), Cursor, Claude Code)
+- An MCP-capable client (e.g. [Claude Code](https://code.claude.com/docs/en/overview), [Claude Desktop](https://claude.ai/download))
 - **OpenWeatherMap API key** - [sign up](https://home.openweathermap.org/users/sign_up), then create a key under [API keys](https://home.openweathermap.org/api_keys)
 
 ## Setup
@@ -61,13 +61,29 @@ This server does **not** replace the official Disney app. It **aggregates public
    pnpm build
    ```
 
-## Connect to Claude Desktop (or another MCP client)
+## Connect to an MCP client
+
+### Claude Code (terminal)
+
+After `pnpm build`, open a terminal in the project root and start [Claude Code](https://code.claude.com/docs/en/overview):
+
+```bash
+claude
+```
+
+This repo includes a minimal project-level [`.mcp.json`](./.mcp.json) that points at the compiled server (`node dist/index.js`). Claude Code picks it up when you run the CLI from this directory. The first time you use project-scoped servers, the CLI may ask you to approve them — see **[Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp)**.
+
+To register the server without relying on the checked-in file (for example from another working directory), use an absolute path:
+
+```bash
+claude mcp add magicplan-mcp -- node /absolute/path/to/magicplan-mcp/dist/index.js
+```
+
+### Claude Desktop
 
 Follow the official guide:
 
 **[Build an MCP server → Testing your server with Claude for Desktop](https://modelcontextprotocol.io/docs/develop/build-server#testing-your-server-with-claude-for-desktop-2)**
-
-This repo includes a minimal [`.mcp.json`](./.mcp.json) example for Cursor-style clients.
 
 ## Available tools
 
