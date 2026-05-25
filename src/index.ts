@@ -206,6 +206,7 @@ mcpServer.registerTool(
   },
 );
 
+// Register plan visit tool to plan a visit to Disneyland Paris
 mcpServer.registerTool(
   'plan_visit',
   {

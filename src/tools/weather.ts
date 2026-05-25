@@ -103,7 +103,7 @@ const checkIsRaining = (slot: Slot): boolean => {
   const rainyTypes = ['Rain', 'Drizzle', 'Thunderstorm'];
   if (rainyTypes.includes(main)) return true;
   if ((slot.rain?.['3h'] ?? 0) > 0) return true;
-  if (slot.pop >= 0.5) return true; // soglia arbitraria, va bene per il parco
+  if (slot.pop >= 0.5) return true; // arbitrary threshold, good enough for the park
   return false;
 };
 
