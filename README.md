@@ -55,30 +55,10 @@ This server does **not** replace the official Disney app. It **aggregates public
    cp .env.example .env
    ```
 
-   Edit `.env`:
-
-   ```env
-   OPEN_WEATHER_API_KEY=your_open_weather_api_key
-   ```
-
-   `get_park_weather` and `plan_visit` (when `weatherAware` is enabled) read this via `dotenv` from the project root.
-
 3. **Build** the server:
 
    ```bash
    pnpm build
-   ```
-
-4. **Run** (stdio transport for MCP):
-
-   ```bash
-   pnpm start
-   ```
-
-   For local development with auto-reload:
-
-   ```bash
-   pnpm dev
    ```
 
 ## Connect to Claude Desktop (or another MCP client)
@@ -87,14 +67,7 @@ Follow the official guide:
 
 **[Build an MCP server → Testing your server with Claude for Desktop](https://modelcontextprotocol.io/docs/develop/build-server#testing-your-server-with-claude-for-desktop-2)**
 
-Point your client at the built entrypoint, for example:
-
-- **Command:** `node`
-- **Args:** `dist/index.js`
-- **Working directory:** root of this repo (so `.env` is found)
-- **Env:** include `OPEN_WEATHER_API_KEY` if your client does not load `.env` automatically
-
-This repo includes a minimal [`.mcp.json`](./.mcp.json) example for Cursor-style clients; merge `OPEN_WEATHER_API_KEY` into the server `env` block if needed.
+This repo includes a minimal [`.mcp.json`](./.mcp.json) example for Cursor-style clients.
 
 ## Available tools
 
@@ -106,12 +79,12 @@ This repo includes a minimal [`.mcp.json`](./.mcp.json) example for Cursor-style
 | `get_park_weather`          | Weather / short forecast at fixed park coordinates            |
 | `plan_visit`                | Composite: characters + waits + optional rain → indoor filter |
 
-### Example queries (English)
+### Example queries
 
 **`search_character`**
 
-- _"Who is Elsa and which films is she in?"_
-- _"Tell me about Mickey Mouse at Disneyland Paris."_
+- _"I need a full overview of Goofy; not just rides, also films and TV."_
+- _"Using live character data, who is Moana and where does she appear in the parks?"_
 
 **`get_character_attractions`**
 
@@ -131,6 +104,7 @@ This repo includes a minimal [`.mcp.json`](./.mcp.json) example for Cursor-style
 
 **`plan_visit`**
 
+- _"Do I need an umbrella at Disneyland Paris today? Plan our day for Mickey and Anna fans, max 25 minutes per ride."_
 - _"Plan our day for Frozen and Ratatouille fans, max 30 minutes wait."_
 - _"Suggest Elsa-related rides under 25 minutes; consider the weather."_
 
@@ -146,8 +120,6 @@ This repo includes a minimal [`.mcp.json`](./.mcp.json) example for Cursor-style
    - Keeps rides that are open, under `maxWaitMinutes`, and not Single Rider lines.
    - If `weatherAware` is true (default) and the current forecast suggests rain, keeps only attractions marked **indoor** in [`src/data/attractionsMetaData.ts`](./src/data/attractionsMetaData.ts) (hand-curated; queue-times does not provide indoor/outdoor).
    - Returns a text list sorted by shortest wait.
-
-Logging for errors uses **`console.error`** only, so stdout stays clean for the MCP protocol.
 
 ## Project layout
 
